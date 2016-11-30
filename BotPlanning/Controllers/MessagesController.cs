@@ -73,15 +73,36 @@ namespace BotPlanning
                     endOutput = "New timeline added [" + timeline.Date + "]";
                 }
 
-                if (userMessage.ToLower().Equals("get timeline"))
+                if (userMessage.ToLower().Equals("get plan table"))
                 {
-                    List<Timeline> timelines = await AzureManager.AzureManagerInstance.GetTimelines();
-                    endOutput = "";
-                    foreach (Timeline t in timelines)
-                    {
-                        endOutput += "[" + t.Date + "] Happiness " + t.Happiness + ", Sadness " + t.Sadness + "\n\n";
-                    }
                     isWeatherRequest = false;
+                    List<Plan> planList = await AzureManager.AzureManagerInstance.GetPlanTable() ;
+                    endOutput = "";
+                    endOutput = "";
+                    if (planList.Count > 0)
+                    {
+                        string timeSchedule = "";
+                        foreach (Plan p in planList)
+                        {
+                            endOutput += "-----------------------------------------";
+                            endOutput += "Your plan on [" + p.date + "]\r\n";
+                            if (p.time9 != null) { timeSchedule += "\t [@9:00 =>" + p.time9 + "]\r\n"; }
+                            if (p.time10 != null) { timeSchedule += "\t [@10:00 =>" + p.time10 + "]\r\n"; }
+                            if (p.time11 != null) { timeSchedule += "\t [@11:00 =>" + p.time11 + "]\r\n"; }
+                            if (p.time12 != null) { timeSchedule += "\t [@12:00 =>" + p.time12 + "]\r\n"; }
+                            if (p.time13 != null) { timeSchedule += "\t [@13:00 =>" + p.time13 + "]\r\n"; }
+                            if (p.time14 != null) { timeSchedule += "\t [@14:00 =>" + p.time14 + "]\r\n"; }
+                            if (p.time15 != null) { timeSchedule += "\t [@15:00 =>" + p.time15 + "]\r\n"; }
+                            if (p.time16 != null) { timeSchedule += "\t [@16:00 =>" + p.time16 + "]\r\n"; }
+                            endOutput += timeSchedule;
+                            endOutput += "-----------------------------------------";
+                        }
+
+                    }
+                    else
+                    {
+                        endOutput = "No plan.";                      
+                    }
 
                 }
 
@@ -394,7 +415,7 @@ namespace BotPlanning
                                 time16 = subjectList[16]
                             };
                             await AzureManager.AzureManagerInstance.AddPlan(plan);
-                            endOutput = "Done adding " + subject + " on" + date + " at: " + time;
+                            endOutput = "Done adding " + subject + " on " + date + " at: " + time;
                         }
                         else {
                             Plan plan = new Plan();
@@ -446,7 +467,7 @@ namespace BotPlanning
                             //  Plan newplan = plan;
 
                             await AzureManager.AzureManagerInstance.updatePlan(plan);
-                            endOutput = "Done updating Plan" + subject + " on" + date + " at: " + time;
+                            endOutput = "Done updating Plan " + subject + " on " + date + " at: " + time;
                         }
 
 
